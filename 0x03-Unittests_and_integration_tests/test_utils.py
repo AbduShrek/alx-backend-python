@@ -30,23 +30,20 @@ class TestGetJson(unittest.TestCase):
     """Unit tests for utils.get_json"""
 
     def test_get_json(self):
-       """Test the get_json function"""
         test_cases = [
             ("http://example.com", {"payload": True}),
             ("http://holberton.io", {"payload": False}),
         ]
 
         for test_url, test_payload in test_cases:
-            with self.subTest(url=test_url, payload=test_payload):
-                with patch('utils.requests.get') as mock_get:
-                    mock_response = Mock()
-                    mock_response.json.return_value = test_payload
-                    mock_get.return_value = mock_response
+            with patch("utils.requests.get") as mock_get:
+                mock_get.return_value = Mock()
+                mock_get.return_value.json.return_value = test_payload
 
-                    result = get_json(test_url)
+                result = get_json(test_url)
 
-                    mock_get.assert_called_once_with(test_url)
-                    self.assertEqual(result, test_payload)
+                mock_get.assert_called_once_with(test_url)
+                self.assertEqual(result, test_payload)
 
 if __name__ == "__main__":
     unittest.main()
