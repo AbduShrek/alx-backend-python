@@ -28,22 +28,23 @@ class TestAccessNestedMap(unittest.TestCase):
 
 
 class TestGetJson(unittest.TestCase):
-    """Tests for utils.get_json."""
+    """Unit tests for utils.get_json."""
 
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
         ("http://holberton.io", {"payload": False}),
     ])
     def test_get_json(self, test_url, test_payload):
-        """Test utils.get_json with mocked requests.get using parameterized inputs."""
+        """Patch requests.get and verify single call + returned payload."""
         with patch("utils.requests.get") as mock_get:
             mock_resp = Mock()
             mock_resp.json.return_value = test_payload
             mock_get.return_value = mock_resp
 
             result = get_json(test_url)
-            self.assertEqual(result, test_payload)
+
             mock_get.assert_called_once_with(test_url)
+            self.assertEqual(result, test_payload)
 
 if __name__ == "__main__":
     unittest.main()
