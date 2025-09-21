@@ -28,10 +28,10 @@ class TestAccessNestedMap(unittest.TestCase):
 
 
 class TestGetJson(unittest.TestCase):
-    """Unit tests for utils.get_json."""
+    """Tests for utils.get_json."""
 
     def test_get_json(self):
-        """Calls requests.get once and returns the payload (no decorators)."""
+        """Patch requests.get and verify payload + call count (no decorators)."""
         cases = [
             ("http://example.com", {"payload": True}),
             ("http://holberton.io", {"payload": False}),
@@ -43,10 +43,10 @@ class TestGetJson(unittest.TestCase):
                     mock_resp.json.return_value = payload
                     mock_get.return_value = mock_resp
 
-                    result = get_json(url)
-
+                    # Assert return value
+                    self.assertEqual(get_json(url), payload)
+                    # Assert requests.get called exactly once with URL
                     mock_get.assert_called_once_with(url)
-                    self.assertEqual(result, payload)
 
 if __name__ == "__main__":
     unittest.main()
