@@ -5,6 +5,16 @@ from utils import access_nested_map
 from unittest.mock import patch, Mock
 from utils import memoize
 
+"""
+Unit tests for utils.py functions and decorators.
+
+This module contains tests for:
+- access_nested_map (Task 0 & 1)
+- get_json (Task 2)
+- memoize (Task 3)
+"""
+
+
 class TestAccessNestedMap(unittest.TestCase):
     """Unit tests for utils.access_nested_map."""
 
@@ -49,24 +59,32 @@ class TestGetJson(unittest.TestCase):
 
 
 class TestMemoize(unittest.TestCase):
-    """Tests for utils.memoize decorator."""
+    """Unit tests for utils.memoize decorator."""
 
     def test_memoize(self):
-        """a_method is called only once even if a_property is accessed twice."""
+        """
+        Test that a_method is only called once even when
+        a_property is accessed multiple times.
+        """
+
         class TestClass:
+            """Helper class to test memoize decorator."""
+
             def a_method(self):
+                """Return a fixed number (42)."""
                 return 42
 
             @memoize
             def a_property(self):
+                """Return a_method result, memoized by decorator."""
                 return self.a_method()
 
         obj = TestClass()
         with patch.object(TestClass, "a_method", return_value=42) as mock_method:
-            # Access twice; memoize should cache after first call
             self.assertEqual(obj.a_property, 42)
             self.assertEqual(obj.a_property, 42)
             mock_method.assert_called_once()
+
 
 
 if __name__ == "__main__":
